@@ -27,7 +27,6 @@ app.get('/', (req, res) => {
 })
 
 app.get("/:id", (req, res) => {
-    console.log("geting one")
     const { id } = req.params
     const stmt = "select * from crud_contact WHERE id=?";
     db.execute(stmt, [id], (err, result) => {
@@ -41,12 +40,10 @@ app.get("/:id", (req, res) => {
 
 app.post('/', (req, res) => {
     const data = req.body;
-    console.log(data);
     const stmt = "INSERT INTO crud_contact(name, email, contact) VALUES (?, ?, ?)";
     const { name, email, contact } = data;
     db.execute(stmt, [name, email, contact], (err, result) => {
         if (err) {
-            console.log(err);
             res.json({ err, status: 'error' });
         } else {
             res.json({ result, status: 'ok' });
@@ -55,16 +52,12 @@ app.post('/', (req, res) => {
 });
 
 app.delete("/", (req, res) => {
-    console.log(req.body)
     const items = req.body;
-    console.log(items);
 
     const idsString = items.join(",");
-    console.log(idsString);
     const stmt = `DELETE FROM crud_contact WHERE id in (${idsString})`;
     db.execute(stmt, (err, result) => {
         if (err) {
-            console.log(err);
             res.json({ err, status: 'error' });
         } else {
             res.json({ result, status: 'ok' });
@@ -73,15 +66,12 @@ app.delete("/", (req, res) => {
 })
 
 app.patch("/:id", (req, res) => {
-    console.log("editing")
     const data = req.body;
-    console.log(data);
     const stmt = "Update crud_contact SET name=?, email=?, contact=? WHERE id=?";
     const { name, email, contact } = data;
     const { id } = req.params;
     db.execute(stmt, [name, email, contact, id], (err, result) => {
         if (err) {
-            console.log(err);
             res.json({ err, status: 'error' });
         } else {
             res.json({ result, status: 'ok' });
